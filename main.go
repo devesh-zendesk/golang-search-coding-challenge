@@ -3,30 +3,13 @@ package main
 import (
 	"encoding/json"
 	"fmt"
+	"golang-search-coding-challenge/model"
 	"io/ioutil"
 	"log"
-	"reflect"
-	"time"
 )
 
 // The data struct for the decoded data
 // Notice that all fields must be exportable!
-
-type Users []struct {
-	Id         int `json:"_id"`
-	Name       string
-	Created_at time.Time
-	Verified   bool
-	info       UsersTickets
-}
-type UsersTickets []struct {
-	Id          string `json:"_id"`
-	created_at  time.Time
-	Type        string
-	Subject     string
-	Assignee_id int
-	Tags        []string
-}
 
 func main() {
 
@@ -35,7 +18,8 @@ func main() {
 
 	fmt.Println("Please enter the id you want to Search!")
 	fmt.Scanln(&idFromUser)
-	fmt.Println(reflect.TypeOf(idFromUser))
+	// fmt.Println(reflect.TypeOf(idFromUser))
+	searchUsed(idFromUser)
 
 }
 
@@ -52,8 +36,8 @@ func searchUsed(searchID any) {
 	}
 
 	// Now let's unmarshall the data into `payload`
-	var payload Users
-	var info UsersTickets
+	var payload model.Users
+	var info model.UsersTickets
 
 	ticketcontenterr = json.Unmarshal(ticketscontent, &info)
 	usercontenterr = json.Unmarshal(userscontent, &payload)
