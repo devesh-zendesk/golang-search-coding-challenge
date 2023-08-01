@@ -2,49 +2,86 @@ package model
 
 import (
 	"encoding/json"
+	"fmt"
 	"io/ioutil"
 	"log"
+	"strings"
 	"time"
 )
 
-type Users []struct {
-	Id         int `json:"_id"`
-	Name       string
-	Created_at time.Time
-	Verified   bool
-	info       *UsersTickets
+type User struct {
+	Id        int       `json:"_id"`
+	Name      string    `json:"name"`
+	CreatedAt time.Time `json:"created_at"`
+	Verified  bool      `json:"verified"`
+	Tickets   []Ticket
 }
-type UsersTickets []struct {
-	Id          string `json:"_id"`
-	created_at  time.Time
-	Type        string
-	Subject     string
-	Assignee_id int
-	Tags        []string
-}
-
-func LoadUsersJson() Users {
-	userscontent, usercontenterr := ioutil.ReadFile("./users.json")
-	if usercontenterr != nil {
-		log.Fatal("Error when opening file: ", usercontenterr)
-	}
-	payload := Users{}
-	usercontenterr = json.Unmarshal(userscontent, &payload)
-	if usercontenterr != nil {
-		log.Fatal("Error during Unmarshal(): ", usercontenterr)
-	}
-	return payload
+type Ticket struct {
+	Id         string    `json:"_id"`
+	CreatedAt  time.Time `json:"created_at"`
+	Type       string    `json:"type"`
+	Subject    string    `json:"subject"`
+	AssigneeId int       `json:"assignee_id"`
+	Tags       []string  `json:"tags"`
+	Assignee   User
 }
 
-func LoadTicketJson() UsersTickets {
-	ticketscontent, ticketcontenterr := ioutil.ReadFile("./tickets.json")
-	if ticketcontenterr != nil {
-		log.Fatal("Erro when opening file: ", ticketcontenterr)
+type Index struct {
+	reversedMapUsersById   map[int]*User
+	reversedMapUsersByName map[string]*User
+}
+
+type UserFinder interface {
+	GetUserById(id int) (User, error)
+	GetUserByName(name string) (User, error)
+}
+
+func (index *Index) GetUserById(id int) (User, error) {
+	user, exists := index.reversedMapUsersById[id]
+	if !exists {
+		return User{}, fmt.Errorf("User ID %d does not Exist", id)
 	}
-	var info UsersTickets
-	ticketcontenterr = json.Unmarshal(ticketscontent, &info)
-	if ticketcontenterr != nil {
-		log.Fatal("Error during Unmarshal(): ", ticketcontenterr)
+	return *user, nil
+}
+
+func (index *Index) GetUserByName(name string) (User, error) {
+	user, exists := index.reversedMapUsersByName[name]
+	if !exists {
+		return User{}, fmt.Errorf("User with name %s does not Exist", name)
 	}
-	return info
+	return *user, nil
+}
+
+func Init() UserFinder {
+
+	ticketsContent, err := ioutil.ReadFile("./tickets.json")
+	if err != nil {
+		log.Fatal("Erro when opening file: ", err)
+	}
+	var info []Ticket
+	if err = json.Unmarshal(ticketsContent, &info); err != nil {
+		log.Fatal("Error during Unmarshal(): ", err)
+	}
+
+	usersContent, err := ioutil.ReadFile("./users.json")
+	if err != nil {
+		log.Fatal("Error when opening file: ", err)
+	}
+	var payload []User
+	if err = json.Unmarshal([]byte(usersContent), &payload); err != nil {
+		log.Fatal("Error during Unmarshal(): ", err)
+	}
+
+	index := Index{
+		reversedMapUsersById:   make(map[int]*User),
+		reversedMapUsersByName: make(map[string]*User),
+	}
+	for _, record := range payload {
+		id := record.Id
+		name := strings.ToLower(record.Name)
+		index.reversedMapUsersById[id] = &record
+		index.reversedMapUsersByName[name] = &record
+	}
+
+	return &index
 }
