@@ -6,6 +6,7 @@ import (
 	"golang-search-coding-challenge/model"
 	"os"
 	"strings"
+	"time"
 )
 
 func UserInterface(userFinder model.UserFinder) {
@@ -25,11 +26,14 @@ func processCommand(action int, userFinder model.UserFinder) {
 		fmt.Println("Please enter the ID you want to search")
 		var input int
 		fmt.Scan(&input)
+		start := time.Now()
 		user, err := userFinder.GetUserById(input)
 		if err != nil {
 			fmt.Println(err.Error())
 		} else {
 			DisplayUserResults(user)
+			timeElapsed := time.Since(start)
+			fmt.Printf("\nResults found in %s micro-seconds\n", timeElapsed)
 		}
 
 	case 2:
@@ -37,6 +41,7 @@ func processCommand(action int, userFinder model.UserFinder) {
 		input, _ := reader.ReadString('\n')
 		input = strings.TrimSpace(input)
 		input_string := strings.ToLower(input)
+		start := time.Now()
 		users, err := userFinder.GetUserByName(input_string)
 		if err != nil {
 			fmt.Println(err.Error())
@@ -44,6 +49,8 @@ func processCommand(action int, userFinder model.UserFinder) {
 			for _, user := range users {
 				DisplayUserResults(user)
 			}
+			timeElapsed := time.Since(start)
+			fmt.Printf("\nResults found in %s micro-seconds\n", timeElapsed)
 		}
 
 	case 3:
@@ -51,6 +58,7 @@ func processCommand(action int, userFinder model.UserFinder) {
 		input, _ := reader.ReadString('\n')
 		input = strings.TrimSpace(input)
 		input_string := strings.ToLower(input)
+		start := time.Now()
 		users, err := userFinder.GetUserByVerifiedFlag(input_string)
 		if err != nil {
 			fmt.Println(err.Error())
@@ -58,6 +66,8 @@ func processCommand(action int, userFinder model.UserFinder) {
 			for _, user := range users {
 				DisplayUserResults(user)
 			}
+			timeElapsed := time.Since(start)
+			fmt.Printf("\nResults found in %s micro-seconds\n", timeElapsed)
 		}
 
 	case 4:
@@ -65,6 +75,7 @@ func processCommand(action int, userFinder model.UserFinder) {
 		input, _ := reader.ReadString('\n')
 		input = strings.TrimSpace(input)
 		input_string := strings.ToLower(input)
+		start := time.Now()
 		users, err := userFinder.GetUserByCreatedDate(input_string)
 		if err != nil {
 			fmt.Println(err.Error())
@@ -72,6 +83,8 @@ func processCommand(action int, userFinder model.UserFinder) {
 			for _, user := range users {
 				DisplayUserResults(user)
 			}
+			timeElapsed := time.Since(start)
+			fmt.Printf("\nResults found in %s micro-seconds\n", timeElapsed)
 		}
 
 	case 5:
@@ -79,11 +92,14 @@ func processCommand(action int, userFinder model.UserFinder) {
 		input, _ := reader.ReadString('\n')
 		input = strings.TrimSpace(input)
 		input_string := strings.ToLower(input)
+		start := time.Now()
 		tickets, err := userFinder.GetTicketsByType(input_string)
 		if err != nil {
 			fmt.Println(err.Error())
 		} else {
 			DisplayTicketResults(tickets, true)
+			timeElapsed := time.Since(start)
+			fmt.Printf("\nResults found in %s micro-seconds\n", timeElapsed)
 		}
 
 	case 6:
@@ -91,11 +107,14 @@ func processCommand(action int, userFinder model.UserFinder) {
 		input, _ := reader.ReadString('\n')
 		input = strings.TrimSpace(input)
 		input_string := strings.ToLower(input)
+		start := time.Now()
 		tickets, err := userFinder.GetTicketsByTag(input_string)
 		if err != nil {
 			fmt.Println(err.Error())
 		} else {
 			DisplayTicketResults(tickets, true)
+			timeElapsed := time.Since(start)
+			fmt.Printf("\nResults found in %s micro-seconds\n", timeElapsed)
 		}
 
 	case 7:
@@ -103,19 +122,25 @@ func processCommand(action int, userFinder model.UserFinder) {
 		input, _ := reader.ReadString('\n')
 		input = strings.TrimSpace(input)
 		input_string := strings.ToLower(input)
+		start := time.Now()
 		tickets, err := userFinder.GetTicketsByCreatedDate(input_string)
 		if err != nil {
 			fmt.Println(err.Error())
 		} else {
 			DisplayTicketResults(tickets, true)
+			timeElapsed := time.Since(start)
+			fmt.Printf("\nResults found in %s micro-seconds\n", timeElapsed)
 		}
 
 	case 8:
+		start := time.Now()
 		tickets, err := userFinder.GetTicketsWithoutAssignee()
 		if err != nil {
 			fmt.Println(err.Error())
 		} else {
 			DisplayTicketResults(tickets, false)
+			timeElapsed := time.Since(start)
+			fmt.Printf("\nResults found in %s micro-seconds\n", timeElapsed)
 		}
 
 	case 9:
