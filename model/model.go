@@ -167,7 +167,6 @@ func (index *Index) LoadIndex() {
 		}
 		index.reversedMapUsersByVerify[verify_flag] = append(index.reversedMapUsersByVerify[verify_flag], record)
 		index.reversedMapUsersCreated[formated_date] = append(index.reversedMapUsersCreated[formated_date], record)
-
 	}
 
 	for i := 0; i < len(index.tickets); i++ {
