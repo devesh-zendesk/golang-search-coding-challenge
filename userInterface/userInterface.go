@@ -29,14 +29,7 @@ func processCommand(action int, userFinder model.UserFinder) {
 		if err != nil {
 			fmt.Println(err.Error())
 		} else {
-			fmt.Println("\nUser Details:\n\tUser ID: ", user.Id, "\n\tName: ", user.Name, "\n\tCreated At: ", user.CreatedAt, "\n\tVerified: ", user.Verified)
-			if len(user.Tickets) != 0 {
-				fmt.Println("\nTicket Details:")
-				for _, item := range user.Tickets {
-					fmt.Println("\tTicket ID: ", item.Id, "\n\tType: ", item.Type, "\n\tSubject: ", item.Subject, "\n\tCreated At: ", item.CreatedAt, "\n\tTags: ", item.Tags)
-					fmt.Println("")
-				}
-			}
+			DisplayUserResults(user)
 		}
 
 	case 2:
@@ -44,37 +37,26 @@ func processCommand(action int, userFinder model.UserFinder) {
 		input, _ := reader.ReadString('\n')
 		input = strings.TrimSpace(input)
 		input_string := strings.ToLower(input)
-		user, err := userFinder.GetUserByName(input_string)
+		users, err := userFinder.GetUserByName(input_string)
 		if err != nil {
 			fmt.Println(err.Error())
-		}
-		for _, item := range user {
-			fmt.Println("\nUser Details:\n\tUser ID: ", item.Id, "\n\tName: ", item.Name, "\n\tCreated At: ", item.CreatedAt, "\n\tVerified: ", item.Verified)
-			if len(item.Tickets) != 0 {
-				fmt.Println("\nTicket Details:")
-				for _, ele := range item.Tickets {
-					fmt.Println("\tTicket ID: ", ele.Id, "\n\tType: ", ele.Type, "\n\tSubject: ", ele.Subject, "\n\tCreated At: ", ele.CreatedAt, "\n\tTags: ", ele.Tags)
-					fmt.Println("")
-				}
+		} else {
+			for _, user := range users {
+				DisplayUserResults(user)
 			}
 		}
+
 	case 3:
 		fmt.Println("Please enter the Verify Flag you want to search")
 		input, _ := reader.ReadString('\n')
 		input = strings.TrimSpace(input)
 		input_string := strings.ToLower(input)
-		user, err := userFinder.GetUserByVerifiedFlag(input_string)
+		users, err := userFinder.GetUserByVerifiedFlag(input_string)
 		if err != nil {
 			fmt.Println(err.Error())
-		}
-		for _, item := range user {
-			fmt.Println("\nUser Details:\n\tUser ID: ", item.Id, "\n\tName: ", item.Name, "\n\tCreated At: ", item.CreatedAt, "\n\tVerified: ", item.Verified)
-			if len(item.Tickets) != 0 {
-				fmt.Println("\nTicket Details:")
-				for _, ele := range item.Tickets {
-					fmt.Println("\tTicket ID: ", ele.Id, "\n\tType: ", ele.Type, "\n\tSubject: ", ele.Subject, "\n\tCreated At: ", ele.CreatedAt, "\n\tTags: ", ele.Tags)
-					fmt.Println("")
-				}
+		} else {
+			for _, user := range users {
+				DisplayUserResults(user)
 			}
 		}
 
@@ -83,18 +65,12 @@ func processCommand(action int, userFinder model.UserFinder) {
 		input, _ := reader.ReadString('\n')
 		input = strings.TrimSpace(input)
 		input_string := strings.ToLower(input)
-		user, err := userFinder.GetUserByCreatedDate(input_string)
+		users, err := userFinder.GetUserByCreatedDate(input_string)
 		if err != nil {
 			fmt.Println(err.Error())
-		}
-		for _, item := range user {
-			fmt.Println("\nUser Details:\n\tUser ID: ", item.Id, "\n\tName: ", item.Name, "\n\tCreated At: ", item.CreatedAt, "\n\tVerified: ", item.Verified)
-			if len(item.Tickets) != 0 {
-				fmt.Println("\nTicket Details:")
-				for _, ele := range item.Tickets {
-					fmt.Println("\tTicket ID: ", ele.Id, "\n\tType: ", ele.Type, "\n\tSubject: ", ele.Subject, "\n\tCreated At: ", ele.CreatedAt, "\n\tTags: ", ele.Tags)
-					fmt.Println("")
-				}
+		} else {
+			for _, user := range users {
+				DisplayUserResults(user)
 			}
 		}
 
@@ -107,10 +83,7 @@ func processCommand(action int, userFinder model.UserFinder) {
 		if err != nil {
 			fmt.Println(err.Error())
 		} else {
-			for _, ticket := range tickets {
-				fmt.Println("\nUser Details:\n\tUser ID: ", ticket.Assignee.Id, "\n\tName: ", ticket.Assignee.Name, "\n\tCreated At: ", ticket.Assignee.CreatedAt, "\n\tVerified: ", ticket.Assignee.Verified)
-				fmt.Println("\nTicket Details:\n\tTicket ID: ", ticket.Id, "\n\tType: ", ticket.Type, "\n\tSubject: ", ticket.Subject, "\n\tCreated At: ", ticket.CreatedAt, "\n\tTags: ", ticket.Tags)
-			}
+			DisplayTicketResults(tickets, true)
 		}
 
 	case 6:
@@ -122,10 +95,7 @@ func processCommand(action int, userFinder model.UserFinder) {
 		if err != nil {
 			fmt.Println(err.Error())
 		} else {
-			for _, ticket := range tickets {
-				fmt.Println("\nUser Details:\n\tUser ID: ", ticket.Assignee.Id, "\n\tName: ", ticket.Assignee.Name, "\n\tCreated At: ", ticket.Assignee.CreatedAt, "\n\tVerified: ", ticket.Assignee.Verified)
-				fmt.Println("\nTicket Details:\n\tTicket ID: ", ticket.Id, "\n\tType: ", ticket.Type, "\n\tSubject: ", ticket.Subject, "\n\tCreated At: ", ticket.CreatedAt, "\n\tTags: ", ticket.Tags)
-			}
+			DisplayTicketResults(tickets, true)
 		}
 
 	case 7:
@@ -137,10 +107,7 @@ func processCommand(action int, userFinder model.UserFinder) {
 		if err != nil {
 			fmt.Println(err.Error())
 		} else {
-			for _, ticket := range tickets {
-				fmt.Println("\nUser Details:\n\tUser ID: ", ticket.Assignee.Id, "\n\tName: ", ticket.Assignee.Name, "\n\tCreated At: ", ticket.Assignee.CreatedAt, "\n\tVerified: ", ticket.Assignee.Verified)
-				fmt.Println("\nTicket Details:\n\tTicket ID: ", ticket.Id, "\n\tType: ", ticket.Type, "\n\tSubject: ", ticket.Subject, "\n\tCreated At: ", ticket.CreatedAt, "\n\tTags: ", ticket.Tags)
-			}
+			DisplayTicketResults(tickets, true)
 		}
 
 	case 8:
@@ -148,9 +115,7 @@ func processCommand(action int, userFinder model.UserFinder) {
 		if err != nil {
 			fmt.Println(err.Error())
 		} else {
-			for _, ticket := range tickets {
-				fmt.Println("\nTicket Details:\n\tTicket ID: ", ticket.Id, "\n\tType: ", ticket.Type, "\n\tSubject: ", ticket.Subject, "\n\tCreated At: ", ticket.CreatedAt, "\n\tTags: ", ticket.Tags)
-			}
+			DisplayTicketResults(tickets, false)
 		}
 
 	case 9:
@@ -159,5 +124,25 @@ func processCommand(action int, userFinder model.UserFinder) {
 
 	default:
 		fmt.Println("Invalid")
+	}
+}
+
+func DisplayUserResults(user model.User) {
+	fmt.Println("\nUser Details:\n\tUser ID: ", user.Id, "\n\tName: ", user.Name, "\n\tCreated At: ", user.CreatedAt, "\n\tVerified: ", user.Verified)
+	if len(user.Tickets) != 0 {
+		fmt.Println("\nTicket Details:")
+		for _, item := range user.Tickets {
+			fmt.Println("\tTicket ID: ", item.Id, "\n\tType: ", item.Type, "\n\tSubject: ", item.Subject, "\n\tCreated At: ", item.CreatedAt, "\n\tTags: ", item.Tags)
+			fmt.Println("")
+		}
+	}
+}
+
+func DisplayTicketResults(tickets []model.Ticket, user_flag bool) {
+	for _, ticket := range tickets {
+		if user_flag {
+			fmt.Println("\nUser Details:\n\tUser ID: ", ticket.Assignee.Id, "\n\tName: ", ticket.Assignee.Name, "\n\tCreated At: ", ticket.Assignee.CreatedAt, "\n\tVerified: ", ticket.Assignee.Verified)
+		}
+		fmt.Println("\nTicket Details:\n\tTicket ID: ", ticket.Id, "\n\tType: ", ticket.Type, "\n\tSubject: ", ticket.Subject, "\n\tCreated At: ", ticket.CreatedAt, "\n\tTags: ", ticket.Tags)
 	}
 }
