@@ -1,7 +1,7 @@
 # Search Engine 
 A Project for doing Hnadson practices on GoLang
 
-##Description:
+## Description:
 
 * This CLI Application is developed for Searching the data fron the given JSON files.
 
@@ -21,15 +21,15 @@ A Project for doing Hnadson practices on GoLang
         - Tags
 
 * You can search from the below feilds:
-    1. UserId 
-    2. User Name 
-    3. User Verified Flag 
-    4. User Created Date 
-    5. Type of the Ticket 
-    6. Tag of the Ticket 
-    7. Ticket Created Date 
-    8. Tickets Without Assignee 
-    9. exit
+    1 UserId 
+    2 User Name 
+    3 User Verified Flag 
+    4 User Created Date 
+    5 Type of the Ticket 
+    6 Tag of the Ticket 
+    7 Ticket Created Date 
+    8 Tickets Without Assignee 
+    9 exit
 
 * Once the application starts, it will ask you by which field do you want to search. You need to insert the digit which refers to the feild you want to search.
 
